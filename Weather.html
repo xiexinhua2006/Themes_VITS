@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <script src="js/jquery-3.4.1.min.js"></script>
+    <title>VITS-Weather - DBS</title>
+    
+
+</head>
+
+<body>
+
+</body>
+
+<div id="hhg"></div>
+<script type="text/javascript">
+    console.log("Something here.");
+
+    // 播放音频
+    async function playAudio(cityCode, proCode) {
+        var lang = 'jp'; //可选zh（中文）或jp（日文（不稳定））
+        var username = '';  //您的昵称（中文则需要全中文，日语则需全日文，不能包含数字符号）
+        var speaker = ''; //音频角色
+
+
+        //播放音频并等待播放完成
+        await vitsAudioPlay(speaker, username, lang, cityCode, proCode);
+    }
+
+
+    //函数用于请求API并播放返回的音频
+    async function vitsAudioPlay(speaker, username, lang, cityCode, proCode) {
+
+        //var cityCode = '310104'; //有网络代理无法获取位置的可以自定义需要的城市代码
+
+        var apiUrl = `https://your.adresss.here/?citycode=${cityCode}&procode=${proCode}&speaker=${speaker}&username=${username}&lang=${lang}`; //自行替换自己的URL
+        //发起请求
+        var response = await fetch(apiUrl);
+        var data = await response.json();
+
+        //获取生成的音频链接并播放
+        var audioUrl = data.audio_url;
+        var audioElement = new Audio(audioUrl);
+        audioElement.play();
+
+        //返回一个Promise，表示音频放完
+        return new Promise(resolve => {
+            audioElement.onended = resolve;
+        });
+    }
+
+    //异步
+    async function playSequentially() {
+
+    //当前位置请求
+    var url = 'https://whois.pconline.com.cn/ipJson.jsp?&json=true'; //仅适用中国大陆
+
+    // 发送 GET 请求获取 JSON 数据
+    fetch(url)
+        .then(response => response.text()) // 将响应解析为文本
+        .then(data => {
+            // 去除换行符、制表符等
+            var cleanedData = data.replace(/[\r\n\t]/g, '');
+            
+            // 解析 JSON 数据
+            var jsonData = JSON.parse(cleanedData);
+            
+            // 提取cityCode和proCode
+            var cityCode = jsonData.cityCode;
+            var proCode = jsonData.proCode;
+
+            // 打印结果
+            console.log('City Code:', cityCode);
+            console.log('Province Code:', proCode);
+
+            // 播放音频并等待播放完成
+            playAudio(cityCode, proCode);
+        })
+        .catch(error => {
+            console.error('Error fetching JSON:', error);
+        });
+
+}
+
+
+    
+
+    playSequentially();
+
+</script>
+
+<div id="videoBox">
+    <video loop autoplay muted>
+              <source src="./video/Wallpaper_F.webm" type="video/webm"/>
+              <!-- 你的壁纸路径 ↑-->
+              your browser does not support the video tag
+          </video>
+</div>
+
+</html>
+

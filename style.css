@@ -1,0 +1,68 @@
+* {
+    padding: 0;
+    border: 0;
+    margin: 0;
+}
+
+body {
+    background-color: white;
+    overflow: hidden;
+}
+
+#audioBox {
+    position: fixed;
+    padding: 10px;
+    right: 0;
+    z-index: 100;
+}
+
+audio {
+    outline: none;
+}
+
+#videoBox {
+    float: left;
+    position: relative;
+    left: 50%;
+    height: 100vh;
+}
+
+video {
+    position: relative;
+    left: -50%;
+    top: 0;
+    bottom: 0;
+    height: 100%;
+    width: auto;
+}
+
+.infoBox {
+    margin: 20px 0px;
+    padding: 20px 0px;
+    text-align: center;
+    font-size: 14px;
+    color: black;
+    /* text-shadow: black 0.1em 0.1em 0.2em; */
+    background-color: white;
+    opacity: 1;
+    border-radius: 30px;
+    /* line-height: 3em; */
+    letter-spacing: 0.1em;
+    font-family: "Microsoft Yahei", sans-serif;
+}
+
+
+/* 预设分辨率大于1080时 */
+
+@media screen and (min-height:1080) {
+    #videoBox,
+    video {
+        position: fixed;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        height: 100%;
+        width: 100%;
+    }
+}
