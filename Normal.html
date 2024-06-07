@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <script src="js/jquery-3.4.1.min.js"></script>
+    <title>VITS - DBS</title>
+    
+
+</head>
+
+<body>
+
+</body>
+
+<div id="hhg"></div>
+<script type="text/javascript">
+    console.log("Something here.");
+
+    //函数用于请求API并播放返回的音频
+
+    async function vitsAudioPlay(text, speaker) {
+        var apiUrl = 'https://your.vits_server.adress/';
+
+        var postData = new FormData();
+        
+        postData.append('text', text);
+        postData.append('sdp_ratio', '0.5');
+        postData.append('noise_scale', '0.6');
+        postData.append('noise_scale_w', '0.667');
+        postData.append('speaker', speaker);
+
+        var response = await fetch(apiUrl, {
+            method: 'POST',
+            body: postData
+        });
+
+        //解析JSON 
+        var data = await response.json();
+
+        //获取生成的音频链接并播放
+        var audioUrl = data.audio_url;
+        var audioElement = new Audio(audioUrl);
+        audioElement.play();
+
+        //返回一个Promise表示音频放完
+        return new Promise(resolve => {
+            audioElement.onended = resolve;
+        });
+    }
+
+    //异步按顺序播放两段音频
+    async function playSequentially() {
+        //可手动定义
+        var text1 = 'おかえりなさい、さきこちゃん！'; //第一段音频文字
+        var speaker1 = 'C1'; //第一段音频角色
+
+        var text2 = '为什么要演奏春日影！！！'; //第二段音频文字
+        var speaker2 = 'C2'; //第二段音频角色
+
+
+        //播放第一段音频并等待播放完成
+        await vitsAudioPlay(text1, speaker1);
+
+        //播放第二段音频 取消下行代码注释以启用。
+        //await vitsAudioPlay(text2, speaker2);
+
+    }
+
+    //调用函数开始按顺序播放两段音频
+    playSequentially();
+
+</script>
+
+<div id="videoBox">
+    <video loop autoplay muted>
+              <source src="./video/Wallpaper.webm" type="video/webm"/>
+              <!-- 你的壁纸路径 ↑-->
+              your browser does not support the video tag
+          </video>
+</div>
+
+</html>
+
